@@ -1,13 +1,52 @@
 {
   "name": "depsite",
   "version": "1.0.0",
-  "main": "index.js",
+  "description": "A TypeScript CLI tool that automates the deployment of nginx reverse proxy configurations for Node.js applications",
+  "main": "dist/index.js",
+  "bin": {
+    "depsite": "./dist/index.js"
+  },
+  "files": [
+    "dist/**/*",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=14.0.0"
+  },
   "license": "MIT",
   "scripts": {
     "start": "ts-node src/index.ts",
     "build": "tsc",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "ts-node src/index.ts",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepublishOnly": "yarn build",
+    "postinstall": "echo 'DepSite installed successfully! Run: depsite --help'"
   },
+  "keywords": [
+    "nginx",
+    "deployment",
+    "devops",
+    "cli",
+    "ssl",
+    "certbot",
+    "reverse-proxy",
+    "automation",
+    "typescript",
+    "nodejs"
+  ],
+  "author": {
+    "name": "Abdelghani El Mouak",
+    "email": "your.email@example.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yourusername/depsite.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yourusername/depsite/issues"
+  },
+  "homepage": "https://github.com/yourusername/depsite#readme",
   "dependencies": {
     "@types/inquirer": "^9.0.8",
     "@types/node": "^24.0.7",
@@ -17,5 +56,6 @@
   },
   "devDependencies": {
     "ts-node": "^10.9.2"
-  }
+  },
+  "preferGlobal": true
 }
