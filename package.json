@@ -37,16 +37,16 @@
   ],
   "author": {
     "name": "Abdelghani El Mouak",
-    "email": "your.email@example.com"
+    "email": "abdelghanielmouak@gmail.com"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/yourusername/depsite.git"
+    "url": "git+https://github.com/kemora13conf/depsite.git"
   },
   "bugs": {
-    "url": "https://github.com/yourusername/depsite/issues"
+    "url": "https://github.com/kemora13conf/depsite/issues"
   },
-  "homepage": "https://github.com/yourusername/depsite#readme",
+  "homepage": "https://github.com/kemora13conf/depsite#readme",
   "dependencies": {
     "@types/inquirer": "^9.0.8",
     "@types/node": "^24.0.7",

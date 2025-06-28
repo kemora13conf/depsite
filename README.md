@@ -18,6 +18,22 @@ A TypeScript CLI tool that automates the deployment of nginx reverse proxy confi
 - Certbot (optional, for SSL setup)
 - Sudo privileges for nginx configuration
 
+## Quick Start
+
+```bash
+# Install globally
+npm install -g depsite
+
+# Deploy a site
+depsite
+
+# Remove a site
+depsite remove my-project
+
+# Show help
+depsite --help
+```
+
 ## Installation
 
 ```bash
@@ -34,11 +50,13 @@ yarn build
 ## Usage
 
 ### Development Mode
+
 ```bash
 yarn dev
 ```
 
 ### Production Mode
+
 ```bash
 # Build first
 yarn build
