@@ -3,7 +3,7 @@ export declare class ConfigGenerator {
     /**
      * Generates complete nginx configuration for a site
      */
-    generateNginxConfig(config: ProcessedConfig): string;
+    generateNginxConfig(config: ProcessedConfig, upstreamAddress?: string): string;
     /**
      * Generates SSL-enabled nginx configuration
      */

@@ -137,14 +137,15 @@ class ValidationService {
     async checkPortConflicts(portNumber) {
         const errors = [];
         try {
-            // Check if port is already in use using netstat or ss
-            const result = await this.systemService.checkDependencies();
-            // You could add more sophisticated port checking here
-            // For now, we'll just validate against known reserved ports
+            // Check if port is available by trying to connect to it
+            const isPortInUse = await this.systemService.checkPortInUse(portNumber);
+            if (!isPortInUse) {
+                errors.push(`No service is running on port ${portNumber}. Please ensure your Node.js application is running on this port before deploying.`);
+            }
         }
         catch (error) {
-            // Port checking failed, but this shouldn't block deployment
-            // Log warning instead of error
+            // Port checking failed, add warning
+            errors.push(`Warning: Could not verify if port ${portNumber} is in use. Please ensure your Node.js application is running.`);
         }
         return {
             isValid: errors.length === 0,

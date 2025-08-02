@@ -15,13 +15,16 @@ export class NginxService {
   /**
    * Generates nginx configuration content
    */
-  generateConfiguration(config: ProcessedConfig): string {
+  async generateConfiguration(config: ProcessedConfig): Promise<string> {
     const { cleanProjectName, domainName, portNumber, upstreamName } = config;
+    
+    // Determine the best upstream address based on how the service is bound
+    const upstreamAddress = await this.systemService.getBestUpstreamAddress(portNumber);
 
     return `# Upstream for ${config.projectName} Production
 upstream ${upstreamName} {
     ip_hash;
-    server 127.0.0.1:${portNumber};
+    server ${upstreamAddress}:${portNumber};
 }
 
 # HTTP Server Block
@@ -57,7 +60,7 @@ server {
    */
   async createConfiguration(config: ProcessedConfig): Promise<NginxOperationResult> {
     try {
-      const configContent = this.generateConfiguration(config);
+      const configContent = await this.generateConfiguration(config);
       const configPath = this.getConfigPath(config.cleanProjectName);
 
       await this.processService.writeFileWithSudo(configContent, configPath);

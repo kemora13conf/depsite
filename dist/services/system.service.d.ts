@@ -57,5 +57,16 @@ export declare class SystemService {
      * Validates that the system has enough resources for deployment
      */
     validateSystemResources(): Promise<void>;
+    /**
+     * Checks if a port is in use by attempting to connect to it
+     * Checks both localhost (127.0.0.1) and all interfaces (0.0.0.0) bindings
+     */
+    checkPortInUse(port: number): Promise<boolean>;
+    /**
+     * Determines the best upstream address for a given port
+     * Returns 127.0.0.1 if the service is bound to localhost/127.0.0.1
+     * Returns 127.0.0.1 if the service is bound to 0.0.0.0 (accessible via localhost)
+     */
+    getBestUpstreamAddress(port: number): Promise<string>;
 }
 //# sourceMappingURL=system.service.d.ts.map

@@ -164,6 +164,59 @@ class SystemService {
             throw new types_1.SystemError('Nginx service is not running');
         }
     }
+    /**
+     * Checks if a port is in use by attempting to connect to it
+     * Checks both localhost (127.0.0.1) and all interfaces (0.0.0.0) bindings
+     */
+    async checkPortInUse(port) {
+        try {
+            // Use ss to check if port is listening on any interface
+            const output = await this.processService.getCommandOutput(`ss -tlnp | grep ":${port} "`);
+            return output.trim().length > 0;
+        }
+        catch {
+            try {
+                // Fallback to netstat if ss is not available
+                const output = await this.processService.getCommandOutput(`netstat -tlnp | grep ":${port} "`);
+                return output.trim().length > 0;
+            }
+            catch {
+                // If both fail, try a simple connection test to localhost
+                try {
+                    await this.processService.getCommandOutput(`timeout 2 bash -c 'echo > /dev/tcp/127.0.0.1/${port}'`);
+                    return true;
+                }
+                catch {
+                    return false;
+                }
+            }
+        }
+    }
+    /**
+     * Determines the best upstream address for a given port
+     * Returns 127.0.0.1 if the service is bound to localhost/127.0.0.1
+     * Returns 127.0.0.1 if the service is bound to 0.0.0.0 (accessible via localhost)
+     */
+    async getBestUpstreamAddress(port) {
+        try {
+            // Check what interface the service is bound to
+            const output = await this.processService.getCommandOutput(`ss -tlnp | grep ":${port} "`);
+            // Check if bound to localhost specifically
+            if (output.includes('127.0.0.1:')) {
+                return '127.0.0.1';
+            }
+            // Check if bound to all interfaces (0.0.0.0 or *)
+            if (output.includes('0.0.0.0:') || output.includes('*:')) {
+                return '127.0.0.1'; // Use localhost to connect to 0.0.0.0 binding
+            }
+            // Default to localhost
+            return '127.0.0.1';
+        }
+        catch {
+            // If we can't determine, default to localhost
+            return '127.0.0.1';
+        }
+    }
 }
 exports.SystemService = SystemService;
 //# sourceMappingURL=system.service.js.map

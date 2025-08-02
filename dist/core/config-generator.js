@@ -7,7 +7,7 @@ class ConfigGenerator {
     /**
      * Generates complete nginx configuration for a site
      */
-    generateNginxConfig(config) {
+    generateNginxConfig(config, upstreamAddress = '127.0.0.1') {
         const { cleanProjectName, domainName, portNumber, upstreamName, projectName } = config;
         return this.buildConfigTemplate({
             projectName,
@@ -15,6 +15,7 @@ class ConfigGenerator {
             domainName,
             portNumber,
             upstreamName,
+            upstreamAddress,
             clientMaxBodySize: constants_1.NGINX_CONFIG.CLIENT_MAX_BODY_SIZE,
             proxyReadTimeout: constants_1.NGINX_CONFIG.PROXY_READ_TIMEOUT,
             proxyConnectTimeout: constants_1.NGINX_CONFIG.PROXY_CONNECT_TIMEOUT
@@ -33,11 +34,11 @@ class ConfigGenerator {
      * Builds the main configuration template
      */
     buildConfigTemplate(params) {
-        const { projectName, cleanProjectName, domainName, portNumber, upstreamName, clientMaxBodySize, proxyReadTimeout, proxyConnectTimeout } = params;
+        const { projectName, cleanProjectName, domainName, portNumber, upstreamName, upstreamAddress = '127.0.0.1', clientMaxBodySize, proxyReadTimeout, proxyConnectTimeout } = params;
         return `# Upstream for ${projectName} Production
 upstream ${upstreamName} {
     ip_hash;
-    server 127.0.0.1:${portNumber};
+    server ${upstreamAddress}:${portNumber};
 }
 
 # HTTP Server Block

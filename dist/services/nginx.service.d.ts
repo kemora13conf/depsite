@@ -8,7 +8,7 @@ export declare class NginxService {
     /**
      * Generates nginx configuration content
      */
-    generateConfiguration(config: ProcessedConfig): string;
+    generateConfiguration(config: ProcessedConfig): Promise<string>;
     /**
      * Creates nginx configuration file
      */
